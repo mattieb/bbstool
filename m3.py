@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 # $Id$
 #
 # Copyright (c) 2005 Matt Behrens.
@@ -23,18 +21,33 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-# This setup script is currently only for use with py2exe.  Patches
-# welcome.
+"""
+Support for M3 Adapter save files (.dat)
+"""
 
-import distutils.core
-import py2exe
+WILDCARD = "M3 Adapter save files (*.dat)|*.dat"
 
-distutils.core.setup(name="dbbsed",
-        version="0.2-beta",
-        description="Daigasso! Band Brothers Save Editor",
-        author="Matt Behrens", author_email="matt@zigg.com",
-        url="http://www.zigg.com/code/dbbsed/",
-        windows=["dbbsed.py"],
-        options={"py2exe": {"packages": ["encodings"]}})
+class SaveFile(object):
+    """
+    M3 Adapter save file (.dss)
+    """
+
+    def __init__(self, file, save_class):
+        # File leads off with actual save
+        self.save = save_class(file)
+
+        # Remainder of file is opaque footer
+        self._opaque = file.read(1024)
+
+        if len(self._opaque) != 1024:
+            raise IOError, "short read"
+
+    def write(self, file):
+        """
+        Write the save image to a file
+        """
+
+        self.save.write(file)
+        file.write(self._opaque)
 
 # ex:et:sw=4:ts=4

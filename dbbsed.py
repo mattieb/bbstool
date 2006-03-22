@@ -28,9 +28,14 @@
 import wx
 
 import dbbsave
-import dsmax
+import maxds
+import savedump
+import m3
 
-MENU_OPEN_DSMAX = wx.NewId()
+MENU_OPEN_MAXDS = wx.NewId()
+MENU_OPEN_M3 = wx.NewId()
+MENU_OPEN_SAVEDUMP = wx.NewId()
+
 MENU_SAVE = wx.NewId()
 MENU_SAVE_AS = wx.NewId()
 MENU_IMPORT_DATA = wx.NewId()
@@ -47,7 +52,6 @@ BUTTON_IMPORT = wx.NewId()
 BUTTON_EXPORT = wx.NewId()
 BUTTON_ABOUT_OK = wx.NewId()
 
-WILDCARD_DSMAX = "Action Replay DS MAX save files (*.dss)|*.dss"
 WILDCARD_SCORE = "Daigasso! Band Brothers score files (*.bbs)|*.bbs"
 WILDCARD_DATA = "Daigasso! Band Brothers game data (*.bbd)|*.bbd"
 
@@ -62,7 +66,9 @@ class MainFrame(wx.Frame):
         self.SetMenuBar(self.main_frame_menubar)
         self.file_menu = wx.Menu()
         self.file_menu_sub = wx.Menu()
-        self.file_menu_sub.Append(MENU_OPEN_DSMAX, "&Action Replay DS MAX save file...", "", wx.ITEM_NORMAL)
+        self.file_menu_sub.Append(MENU_OPEN_MAXDS, "&Action Replay MAX for DS uncompressed save file...", "", wx.ITEM_NORMAL)
+        self.file_menu_sub.Append(MENU_OPEN_M3, "&M3 Adapter save file...", "", wx.ITEM_NORMAL)
+        self.file_menu_sub.Append(MENU_OPEN_SAVEDUMP, "&Save dump...", "", wx.ITEM_NORMAL)
         self.file_menu.AppendMenu(wx.NewId(), "&Open", self.file_menu_sub, "")
         self.file_menu.AppendSeparator()
         self.file_menu.Append(MENU_SAVE, "&Save", "", wx.ITEM_NORMAL)
@@ -88,7 +94,9 @@ class MainFrame(wx.Frame):
         # end wxGlade
 
         # rig up events
-        wx.EVT_MENU(self, MENU_OPEN_DSMAX, self.open_dsmax)
+        wx.EVT_MENU(self, MENU_OPEN_MAXDS, self.open_maxds)
+        wx.EVT_MENU(self, MENU_OPEN_M3, self.open_m3)
+        wx.EVT_MENU(self, MENU_OPEN_SAVEDUMP, self.open_savedump)
         wx.EVT_MENU(self, MENU_SAVE, self.save)
         wx.EVT_MENU(self, MENU_SAVE_AS, self.save_as)
         wx.EVT_MENU(self, MENU_IMPORT_DATA, self.import_game_data)
@@ -122,12 +130,12 @@ class MainFrame(wx.Frame):
         # begin wxGlade: MainFrame.__do_layout
         score_list_sizer = wx.BoxSizer(wx.HORIZONTAL)
         buttons_sizer = wx.BoxSizer(wx.VERTICAL)
-        score_list_sizer.Add(self.score_list_box, 0, wx.ALL|wx.EXPAND, 4)
-        buttons_sizer.Add(self.move_up_button, 0, wx.ALL, 4)
-        buttons_sizer.Add(self.move_down_button, 0, wx.ALL, 4)
-        buttons_sizer.Add(self.import_button, 0, wx.ALL, 4)
-        buttons_sizer.Add(self.export_button, 0, wx.ALL, 4)
-        score_list_sizer.Add(buttons_sizer, 1, wx.EXPAND, 0)
+        score_list_sizer.Add(self.score_list_box, 0, wx.LEFT|wx.TOP|wx.BOTTOM|wx.EXPAND, 8)
+        buttons_sizer.Add(self.move_up_button, 0, wx.EXPAND, 0)
+        buttons_sizer.Add(self.move_down_button, 0, wx.TOP|wx.EXPAND, 8)
+        buttons_sizer.Add(self.import_button, 0, wx.TOP|wx.EXPAND, 8)
+        buttons_sizer.Add(self.export_button, 0, wx.TOP|wx.EXPAND, 8)
+        score_list_sizer.Add(buttons_sizer, 1, wx.ALL|wx.EXPAND, 8)
         self.SetAutoLayout(True)
         self.SetSizer(score_list_sizer)
         score_list_sizer.Fit(self)
@@ -155,24 +163,33 @@ class MainFrame(wx.Frame):
             else:
                 self.score_list_box.Append("(Empty or invalid)")
 
-    def open_dsmax(self, event):
-        open_dialog = wx.FileDialog(self, wildcard=WILDCARD_DSMAX,
+    def _open(self, package):
+        open_dialog = wx.FileDialog(self, wildcard=package.WILDCARD,
                 style=wx.OPEN)
         if open_dialog.ShowModal() == wx.ID_OK:
             self.save_file_name = open_dialog.GetPath()
             try:
-                self.save_file = dsmax.SaveFile(open(self.save_file_name,
-                    "rb"), dbbsave.Save)
+                self.save_file = package.SaveFile(open(self.save_file_name,
+                        "rb"), dbbsave.Save)
                 
                 self.update_score_list()
                 self.enable_file_controls()
-            except ValueError:
+            except NotImplementedError: #ValueError:
                 error_dialog = wx.MessageDialog(self, "Error reading file",
                         "Error", wx.ICON_ERROR)
                 error_dialog.ShowModal()
                 error_dialog.Destroy()
 
         open_dialog.Destroy()
+
+    def open_maxds(self, event):
+        return self._open(maxds)
+
+    def open_m3(self, event):
+        return self._open(m3)
+
+    def open_savedump(self, event):
+        return self._open(savedump)
 
     def enable_file_controls(self):
         self.score_list_box.Enable(True)
@@ -252,8 +269,22 @@ class MainFrame(wx.Frame):
         save_file.close()
 
     def save_as(self, event):
-        if self.save_file.__class__ == dsmax.SaveFile:
-            save_dialog = wx.FileDialog(self, wildcard=WILDCARD_DSMAX,
+	if self.save_file.__class__ == maxds.SaveFile:
+            save_dialog = wx.FileDialog(self, wildcard=dsmax.WILDCARD,
+                    style=wx.SAVE|wx.OVERWRITE_PROMPT)
+            if save_dialog.ShowModal() == wx.ID_OK:
+                self.save_file_name = save_dialog.GetPath()
+                self.save(None)
+            save_dialog.Destroy()
+	elif self.save_file.__class__ == savedump.SaveFile:
+            save_dialog = wx.FileDialog(self, wildcard=savedump.WILDCARD,
+                    style=wx.SAVE|wx.OVERWRITE_PROMPT)
+            if save_dialog.ShowModal() == wx.ID_OK:
+                self.save_file_name = save_dialog.GetPath()
+                self.save(None)
+            save_dialog.Destroy()
+	elif self.save_file.__class__ == m3.SaveFile:
+            save_dialog = wx.FileDialog(self, wildcard=m3.WILDCARD,
                     style=wx.SAVE|wx.OVERWRITE_PROMPT)
             if save_dialog.ShowModal() == wx.ID_OK:
                 self.save_file_name = save_dialog.GetPath()

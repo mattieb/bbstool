@@ -22,8 +22,10 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 """
-Support for Datel's Action Replay DS MAX image files
+Support for Datel's Action Replay MAX for DS image files
 """
+
+WILDCARD = "Action Replay MAX for DS uncompressed save files(*.duc)|*.duc"
 
 import codecs
 
@@ -37,7 +39,7 @@ def nullpad(s, width):
 
 class SaveFile(object):
     """
-    Action Replay DS MAX save image file (.dss)
+    Action Replay MAX for DS save image file (.dss)
     """
 
     def __init__(self, file, save_class):
