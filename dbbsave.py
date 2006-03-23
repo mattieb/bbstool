@@ -27,7 +27,8 @@ Daigasso! Band Brothers DS save manipulation
 
 import nincodec
 
-GAME_DATA_SIZE = 0x8000
+GAME_DATA_SIZE = 0x800
+GAME_DATA_BLOCK_SIZE = 0x8000
 SCORE_SIZE = 0x6000
 PADDING_SIZE = 0x8000
 
@@ -37,12 +38,18 @@ class GameData(object):
     """
 
     def __init__(self, file):
-        self.data = file.read(GAME_DATA_SIZE)
-        if len(self.data) != GAME_DATA_SIZE:
-            raise IOError, "short read"
-        
-        if self.data[:8] != "GBMDGSBB":
-            raise ValueError, "game data magic mismatch"
+        self.data = file.read(GAME_DATA_BLOCK_SIZE)
+        if len(self.data) != GAME_DATA_BLOCK_SIZE:
+            raise IOError, "short read on game data"
+
+        # Search for game data magic
+        found_magic = 0
+        for offset in range(0, GAME_DATA_BLOCK_SIZE, GAME_DATA_SIZE):
+            if self.data[offset:offset+8] == "GBMDGSBB":
+                found_magic = 1
+
+        if not found_magic:
+            raise ValueError, "magic not found in game data block"
 
     def write(self, file):
         file.write(self.data)
@@ -61,7 +68,7 @@ class Score(object):
         else:
             self.data = file.read(SCORE_SIZE)
             if len(self.data) != SCORE_SIZE:
-                raise IOError, "short read"
+                raise IOError, "short read on score data"
 
             if self.data[:8] == "BBRS_GAK":
                 self.valid = True
@@ -69,7 +76,7 @@ class Score(object):
                         self.data[0x40:0x60].decode("nintendo").strip("\x00")
             else:
                 if raise_on_invalid:
-                    raise ValueError, "score magic mismatch"
+                    raise ValueError, "magic not found in score"
                 else:
                     self.valid = False
                     self.title = None
@@ -87,11 +94,16 @@ class Save(object):
 
         self.scores = []
         for n in range(8):
-            self.scores.append(Score(file, raise_on_invalid=False))
+            try:
+                self.scores.append(Score(file, raise_on_invalid=False))
+            except IOError, e:
+                raise IOError, "%s (%d)" % (e, n)
+            except ValueError, e:
+                raise ValueError, "%s (%d)" % (e, n)
 
         self._padding = file.read(PADDING_SIZE)
         if len(self._padding) != PADDING_SIZE:
-            raise IOError, "short read"
+            raise IOError, "short read on padding"
 
     def write(self, file):
         self.game_data.write(file)

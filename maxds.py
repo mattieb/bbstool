@@ -46,7 +46,7 @@ class SaveFile(object):
         self._magic = file.read(16)
 
         if self._magic != "ARDS000000000001":
-            raise ValueError, "file magic mismatch"
+            raise ValueError, "magic not found in save file"
 
         # These look like NUL-padded UTF-16; cross your fingers
         self.game_name = (codecs.BOM_UTF16_LE +

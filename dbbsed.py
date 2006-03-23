@@ -174,9 +174,14 @@ class MainFrame(wx.Frame):
                 
                 self.update_score_list()
                 self.enable_file_controls()
-            except NotImplementedError: #ValueError:
-                error_dialog = wx.MessageDialog(self, "Error reading file",
-                        "Error", wx.ICON_ERROR)
+            except IOError, e:
+                error_dialog = wx.MessageDialog(self,
+                        "Error opening file: %s" % e, "Error", wx.ICON_ERROR)
+                error_dialog.ShowModal()
+                error_dialog.Destroy()
+            except ValueError, e:
+                error_dialog = wx.MessageDialog(self,
+                        "Error opening file: %s" % e, "Error", wx.ICON_ERROR)
                 error_dialog.ShowModal()
                 error_dialog.Destroy()
 
@@ -245,9 +250,10 @@ class MainFrame(wx.Frame):
                     self.update_score_list()
                     self.score_list_box.SetSelection(selection)
                     self.update_buttons(None)
-                except ValueError:
+                except ValueError, e:
                     error_dialog = wx.MessageDialog(self,
-                            "Error reading file", "Error", wx.ICON_ERROR)
+                            "Error reading file: %s" % e,
+                            "Error", wx.ICON_ERROR)
                     error_dialog.ShowModal()
                     error_dialog.Destroy()
             open_dialog.Destroy()
@@ -269,21 +275,21 @@ class MainFrame(wx.Frame):
         save_file.close()
 
     def save_as(self, event):
-	if self.save_file.__class__ == maxds.SaveFile:
+        if self.save_file.__class__ == maxds.SaveFile:
             save_dialog = wx.FileDialog(self, wildcard=dsmax.WILDCARD,
                     style=wx.SAVE|wx.OVERWRITE_PROMPT)
             if save_dialog.ShowModal() == wx.ID_OK:
                 self.save_file_name = save_dialog.GetPath()
                 self.save(None)
             save_dialog.Destroy()
-	elif self.save_file.__class__ == savedump.SaveFile:
+        elif self.save_file.__class__ == savedump.SaveFile:
             save_dialog = wx.FileDialog(self, wildcard=savedump.WILDCARD,
                     style=wx.SAVE|wx.OVERWRITE_PROMPT)
             if save_dialog.ShowModal() == wx.ID_OK:
                 self.save_file_name = save_dialog.GetPath()
                 self.save(None)
             save_dialog.Destroy()
-	elif self.save_file.__class__ == m3.SaveFile:
+        elif self.save_file.__class__ == m3.SaveFile:
             save_dialog = wx.FileDialog(self, wildcard=m3.WILDCARD,
                     style=wx.SAVE|wx.OVERWRITE_PROMPT)
             if save_dialog.ShowModal() == wx.ID_OK:
@@ -302,9 +308,9 @@ class MainFrame(wx.Frame):
                 game_data = dbbsave.GameData(game_data_file)
                 self.save_file.save.game_data = game_data
                 game_data_file.close()
-            except ValueError:
+            except ValueError, e:
                 error_dialog = wx.MessageDialog(self,
-                        "Error reading file", "Error", wx.ICON_ERROR)
+                        "Error reading file: %s" % e, "Error", wx.ICON_ERROR)
                 error_dialog.ShowModal()
                 error_dialog.Destroy()
         open_dialog.Destroy()
@@ -368,7 +374,7 @@ class App(wx.App):
 
 
 if __name__ == "__main__":
-    app = App(0)
+    app = App(1, "debug.txt")
     app.MainLoop()
 
 # ex:et:sw=4:ts=4
