@@ -1,0 +1,560 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
+<book>
+  <title>Band Brothers Save Tool</title>
+
+  <bookinfo>
+    <copyright>
+      <year>2006 Matt Behrens</year>
+    </copyright>
+
+    <author>
+      <firstname>Matt</firstname>
+
+      <surname>Behrens</surname>
+
+      <email>matt@zigg.com</email>
+    </author>
+  </bookinfo>
+
+  <preface>
+    <title>Preface</title>
+
+    <para>A few quick thanks to various folks for making this whole thing
+    possible:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><ulink url="http://jubai.sakura.ne.jp/jubai/bandbrothers/">OUT
+        TAKE ENSEMBLE</ulink>, home of the original Band Brothers Music
+        Editor, for inspiring me to create this tool;</para>
+      </listitem>
+
+      <listitem>
+        <para>The guys behind <ulink url="???">Python</ulink>, <ulink
+        url="http://www.wxwidgets.org/">wxWidgets</ulink>, <ulink
+        url="http://www.wxpython.org/">wxPython</ulink>, and <ulink
+        url="http://wxglade.sourceforge.net/">wxGlade</ulink>, for making it
+        relatively easy for me to put a nice user-friendly face on the whole
+        project;</para>
+      </listitem>
+
+      <listitem>
+        <para>The apparently soon-to-be-reborn <ulink
+        url="http://ndsart.net/">NDSart</ulink>, for carrying the torch of
+        creativity in gaming, letting me know of OUT TAKE ENSEMBLE in the
+        first place, and hooking me up with my first guinea pigs;</para>
+      </listitem>
+
+      <listitem>
+        <para>And of course, <ulink
+        url="http://www.nintendo.co.jp/">Nintendo</ulink>, for taking a chance
+        on Daigasso! Band Brothers in the first place and giving me my
+        number-one reason to own a Nintendo DS for many, many months. (Now,
+        Nintendo of America, where's our American version?)</para>
+      </listitem>
+    </itemizedlist>
+  </preface>
+
+  <chapter>
+    <title>Using the Save Tool</title>
+
+    <para>The Band Brothers Save Tool imports and exports songs created in the
+    Nintendo DS game Daigasso! Band Brothers so that they may be exchanged
+    with far-away users.</para>
+
+    <para>The tool currently supports the following methods of getting access
+    to the save data for the game, which contains the saved songs:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Datel Ltd.'s Action Replay MAX for GBA/DS</para>
+      </listitem>
+
+      <listitem>
+        <para>GBA Movie Player M3</para>
+      </listitem>
+
+      <listitem>
+        <para>Any other method supporting a save dump (<xref
+        linkend="save-dump" />)</para>
+      </listitem>
+    </itemizedlist>
+
+    <section>
+      <title>Installation</title>
+
+      <section>
+        <title>Microsoft Windows</title>
+
+        <para>Precompiled binaries are offered for Microsoft Windows. Simply
+        unzip all files into their own directory; there are quite a few, so
+        keep them separate from other programs so you can easily delete the
+        software at a later date.</para>
+
+        <para>To run the save tool, double-click
+        <filename>bbstool.exe</filename>.</para>
+
+        <para>If you don't wish to use the binaries, you can use the
+        platform-neutral method as well (<xref
+        linkend="other-platforms" />).</para>
+      </section>
+
+      <section id="other-platforms">
+        <title>Other Platforms</title>
+
+        <para>The save tool is written in the Python language and uses the
+        wxPython GUI toolkit. You will need the following dependencies
+        installed on your computer:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><ulink url="http://www.python.org/">Python</ulink>
+            2.4</para>
+          </listitem>
+
+          <listitem>
+            <para><ulink url="http://www.wxpython.org/">wxPython</ulink> 2.6
+            (Unicode version on Microsoft Windows)</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Once you've installed these on your system, run the
+        <filename>bbstool.py</filename> script to start the save tool.</para>
+      </section>
+    </section>
+
+    <section>
+      <title>Accessing Your Game Save</title>
+
+      <section>
+        <title>Action Replay MAX</title>
+
+        <para>The save tool is designed to work with the 1.04 firmware
+        revision and above. If you have an older Action Replay MAX, get the
+        upgrade (version 1.06 is recommended) from <ulink
+        url="http://us.codejunkies.com/support_home.asp">Datel's support
+        site</ulink>; it will speed up your transfers by a factor of four or
+        more and make your use of the save tool less painful<footnote>
+            <para>The first release of the save tool was developed using the
+            old Action Replay MAX firmware. Save transfers using this method
+            took <emphasis>8-9 minutes</emphasis> using this method, each way;
+            you could expect to spend 20 minutes just to try one new
+            song.</para>
+          </footnote>.</para>
+
+        <para>To get your save in a format usable by the save tool:</para>
+
+        <procedure>
+          <step>
+            <para>Follow the procedures in your Action Replay MAX manual to
+            back up the save to your PC Database.</para>
+          </step>
+
+          <step>
+            <para>The save tool works only with uncompressed saves, so you
+            must uncompress your save. From the Action Replay software on your
+            PC, select <guimenuitem>Max Drive DS (DS)</guimenuitem>,
+            <guimenuitem>Manage and swap saves</guimenuitem>, <guimenuitem>My
+            MaxDrive Vault</guimenuitem>. (You do not need to connect your
+            Action Replay MAX as long as your save is already on your
+            PC.)</para>
+          </step>
+
+          <step>
+            <para>Select the save you want to modify on the left and select
+            the decompress and export button, which looks like an open vise
+            with an arrow pointing to the left.</para>
+          </step>
+
+          <step>
+            <para>Select a directory to uncompress the save to and select
+            <guibutton>OK</guibutton>. The resulting file will be named
+            whatever your save was titled with a <filename>.duc</filename>
+            extension. This file is usable with the save tool.</para>
+          </step>
+        </procedure>
+
+        <para>If you don't choose to upgrade your Action Replay MAX, you will
+        have to find and copy your save file from the <filename>\Program
+        Files\Datel\Nintendo DS - GBA Max Drive\PC</filename> directory and
+        rename it so it carries a <filename>.duc</filename> extension.</para>
+
+        <para>You are now ready to load your save into the save tool (<xref
+        linkend="loading-data" />).</para>
+
+        <para>Once you're done working with your save and have saved it to a
+        save file (<xref linkend="saving-data" />), you need to copy it back
+        to your game card:</para>
+
+        <procedure>
+          <step>
+            <para>From the Action Replay software on your PC, select
+            <guimenuitem>Max Drive DS (DS)</guimenuitem>, <guimenuitem>Manage
+            and swap saves</guimenuitem>, <guimenuitem>My MaxDrive
+            Vault</guimenuitem>.</para>
+          </step>
+
+          <step>
+            <para>Select the compress and import button, which looks like a
+            closed vise with an arrow pointing downward.</para>
+          </step>
+
+          <step>
+            <para>Select the save file you modified with the tool.</para>
+          </step>
+
+          <step>
+            <para>Follow the procedures in your Action Replay MAX manual to
+            copy the newly edited save back to your game card.</para>
+          </step>
+        </procedure>
+
+        <para>Again, if you haven't upgraded your Action Replay MAX, you will
+        have to rename the edited file back to the correct extension and put
+        it into the <filename>\Program Files\Datel\Nintendo DS - GBA Max
+        Drive\PC</filename> directory before copying the save back to your
+        game card.</para>
+      </section>
+
+      <section>
+        <title>GBA Movie Player M3</title>
+
+        <para>If you are playing your game from your GBA Movie Player M3
+        instead of from your original game card, the M3 will store your game
+        save on the CompactFlash or Secure Digital memory card you use as its
+        storage card.</para>
+
+        <para>The save tool can open these directly on the card and write them
+        back out in the same manner. When you are ready to load your data
+        (<xref linkend="loading-data" />) into the tool, you can find the
+        <filename>.dat</filename> file that the M3 generates in the
+        <filename>ndssave</filename> folder on your storage card.</para>
+      </section>
+
+      <section id="save-dump">
+        <title>Save dump</title>
+
+        <para>The save tool can also use a save dump, which is simply a file
+        containing the contents of the save EEPROM on the game card. Such a
+        file will be exactly 262,144 bytes in length, and by tradition is
+        named with a <filename>.sav</filename> extension.</para>
+
+        <para>If you have a homebrew-capable Nintendo DS, you can use <ulink
+        url="http://www.pat.hi-ho.ne.jp/sata68/nds.shtml#rain">Rain</ulink>,
+        which will, when booted in a Nintendo DS with the Daigasso! Band
+        Brothers game card inserted, allow you to back up and restore the game
+        save to one of several places, including the filesystem on a CF-based
+        M3. Once you've done this, you can connect the storage card to your
+        computer and load your data (<xref linkend="loading-data" />) directly
+        from the storage card.</para>
+      </section>
+    </section>
+
+    <section>
+      <title>Using the Save Tool</title>
+
+      <section id="loading-data">
+        <title>Opening Save Data</title>
+
+        <para>Once you've gained access to your save data from your PC,
+        opening it is straightforward:</para>
+
+        <procedure>
+          <step>
+            <para>From the <guimenu><accel>F</accel>ile</guimenu> menu, select
+            <guisubmenu><accel>O</accel>pen</guisubmenu>, and select the type
+            of save file you are opening.</para>
+          </step>
+
+          <step>
+            <para>Find the save file you want to open from the file
+            dialog.</para>
+          </step>
+        </procedure>
+
+        <para>If the file loads successfully, you will see the titles of your
+        songs appear in the main window. Slots that do not appear to contain a
+        valid song will read <guilabel>(Empty or invalid)</guilabel>.</para>
+
+        <para>The save tool will do checks on the save file to make sure it is
+        precisely what it expects before permitting you to manipulate it. If
+        it isn't, you'll get one of several errors. If you get one and you're
+        sure your file is intact, contact me.</para>
+      </section>
+
+      <section>
+        <title>Importing Songs</title>
+
+        <para>The save tool lets you import the contents of a
+        <filename>.bbs</filename> file, which contains a Daigasso! Band
+        Brothers score, into one of the eight slots in your save. If the slot
+        you want to use contains a song you want to keep, you should export
+        that song first (<xref linkend="exporting-songs" />).</para>
+
+        <para>To import a song:</para>
+
+        <procedure>
+          <step>
+            <para>Select the slot you want to import the song into from the
+            list of songs.</para>
+          </step>
+
+          <step>
+            <para>Select
+            <guibutton><accel>I</accel>mport...</guibutton></para>
+          </step>
+
+          <step>
+            <para>Find the <filename>.bbs</filename> file you want to
+            import.</para>
+          </step>
+        </procedure>
+
+        <para>If successful, the title of the song in the slot you selected
+        will be replaced with the title of the song you imported.</para>
+
+        <para>The save tool will do checks on the score file to make sure it
+        is indeed a valid score file before importing it into your save. If it
+        isn't, you'll get one of several errors. If you get one and you're
+        sure your file is intact, contact me.</para>
+      </section>
+
+      <section id="exporting-songs">
+        <title>Exporting Songs</title>
+
+        <para>You can share songs you created by exporting them to
+        <filename>.bbs</filename> files. This procedure will make a copy of
+        the song in the slot you select and create a .bbs file that you can
+        not only share with other users of the save tool but also users of
+        some other Band Brothers save manipulation tools (mostly
+        Japanese).</para>
+
+        <para>To export a song:</para>
+
+        <procedure>
+          <step>
+            <para>Select the slot that contains the song you want to import
+            from the list of songs.</para>
+          </step>
+
+          <step>
+            <para>Select
+            <guibutton><accel>E</accel>xport...</guibutton></para>
+          </step>
+
+          <step>
+            <para>Find a folder to save your <filename>.bbs</filename> file
+            to, give it a name, and save it.</para>
+          </step>
+
+          <step>
+            <para>Send your file to whomever you want to share it with.</para>
+          </step>
+        </procedure>
+      </section>
+
+      <section>
+        <title>Exporting and Importing Game Data</title>
+
+        <para>The save tool also lets you export and import the game data
+        block into and from <filename>.bbd</filename> files. The game data
+        block contains your scores you've earned for each song, your personal
+        information and settings, as well as what bonus songs and modes you've
+        unlocked.</para>
+
+        <para>The <ulink
+        url="http://sourceforge.net/projects/dbbsed/">SourceForge project
+        page</ulink> for the save tool has a game data package available for
+        download that contains game data blocks for several permutations of
+        unlocked game modes; importing these will erase your scores, personal
+        information, and settings but will allow you to play modes and bonus
+        songs you couldn't otherwise get to for whatever reason<footnote>
+            <para>For example, Abarenbō Shōgun Theme and Gmen'75 rFequire you
+            to play the game in multiplayer mode; this requires a second
+            Nintendo DS system and may not be accessible to some players. The
+            Barbara Bat Theme requires you to complete Recording Ticket Level
+            5 in Pro mode, which is simply beyond the finger capacity of some
+            people.</para>
+          </footnote>.</para>
+
+        <para>To export your game data:</para>
+
+        <procedure>
+          <step>
+            <para>From the <guimenu><accel>F</accel>ile</guimenu> menu, choose
+            <guimenuitem><accel>E</accel>xport Game
+            Data...</guimenuitem></para>
+          </step>
+
+          <step>
+            <para>Find a folder to save your <filename>.bbd</filename> file
+            to, give it a name, and save it.</para>
+          </step>
+        </procedure>
+
+        <para>Importing game data is similarly straightforward:</para>
+
+        <procedure>
+          <step>
+            <para>From the File menu, choose Import Game Data...</para>
+          </step>
+
+          <step>
+            <para>Find the <filename>.bbd</filename> file you wish to
+            import.</para>
+          </step>
+        </procedure>
+
+        <para>The save tool will do checks on the game data file to make sure
+        it is indeed a valid game data file before importing it into your
+        save. If it isn't, you'll get one of several errors. If you get one
+        and you're sure your file is intact, contact me.</para>
+      </section>
+
+      <section>
+        <title>Rearranging Songs</title>
+
+        <para>If you would like to keep your songs in a particular order, such
+        as your own compositions on top and imported songs on the bottom, the
+        save tool can help you here as well. Once you've loaded a save file,
+        you can rearrange songs simply by selecting them and using the
+        <guibutton>Move <accel>U</accel>p</guibutton> and <guibutton>Move
+        <accel>D</accel>own</guibutton> buttons.</para>
+      </section>
+
+      <section id="saving-data">
+        <title>Saving Save Data</title>
+
+        <para>Once you've done everything you wish to do to your save, you
+        need to save it back out so you can transfer it back into your
+        game.</para>
+
+        <caution>
+          <para>Before you save, it's an excellent idea to make a backup of
+          your original save file. Although the save tool performs many checks
+          on the data, it's still entirely possible that your save file might
+          be corrupted in some novel way by either the transfer process or by
+          the save tool itself. If you have a backup, you can at least go back
+          to the point you were at before you started using the tool if
+          something goes wrong.</para>
+        </caution>
+
+        <para>If you want to overwrite your original save file, simply choose
+        <guimenuitem><accel>S</accel>ave</guimenuitem> from the
+        <guimenu><accel>F</accel>ile</guimenu> menu.</para>
+
+        <para>If you want to save your changed save to a new file:</para>
+
+        <procedure>
+          <step>
+            <para>From the <guimenu><accel>F</accel>ile</guimenu> menu, select
+            <guimenuitem>Save <accel>A</accel>s...</guimenuitem></para>
+          </step>
+
+          <step>
+            <para>Find a folder to save your save file to, give it a new name,
+            and save it.</para>
+          </step>
+        </procedure>
+      </section>
+    </section>
+
+    <section>
+      <title>Unexplained Problems</title>
+
+      <para>Most common errors will pop up a dialog explaining the error, and
+      most will happen when you're opening or saving a save file, score, or
+      game data file. If you can't make sense of it, and are sure you're using
+      the tool correctly, please contact me.</para>
+
+      <para>Other errors, which I didn't anticipate, can cause the save tool
+      to behave in unexplained ways. If you get one of these, please find the
+      <filename>debug.txt</filename> file in the directory you started the
+      save tool from. If it's not empty, it probably contains valuable
+      information for me in tracking down your problem, so please send it
+      along with any bug reports. It would be ideal if you could delete or
+      move the file out of the way, reproduce the problem, and then send it
+      along, just in case it's accumulated confusing information from previous
+      problems you've had.</para>
+    </section>
+  </chapter>
+
+  <chapter>
+    <title>Developing the Save Tool</title>
+
+    <warning>
+      <para>End-users: read no further. This chapter only contains information
+      for the types of people who would like to add capabilities or fix bugs
+      in the save tool. If this doesn't sound like your idea of a fun evening,
+      put the book down and walk away slowly.</para>
+    </warning>
+
+    <section>
+      <title>Getting Into the Code</title>
+
+      <para>The save tool is written in the Python programming language, using
+      the wxPython toolkit (which is actually wxWidgets), and should run on
+      any platfom that both of these exist on.</para>
+
+      <para>Beyond these two items, you'll need one more thing, if you plan on
+      modifying the GUI in any way: wxGlade. wxGlade is a GUI builder for
+      wxWidgets, and is used exclusively to build the save tool's user
+      interface. Please take the time to learn how wxGlade works; code can
+      only be written outside of the generated sections in the main
+      application (these are delimited with <code># begin wxGlade</code> and
+      <code># end wxGlade</code>). If you write code inside these sections, it
+      will be clobbered next time wxGlade is used to update the GUI.</para>
+
+      <para>If you have any questions not covered here, please contact
+      me.</para>
+    </section>
+
+    <section>
+      <title>Wish List</title>
+
+      <para>Here's a short list of things I'd like to add to the save tool
+      sometime. Some I even know how to do, but other pressures keep me from
+      doing them. If you'd like to try your hand at one or more, feel free.
+      You may want to ask me first to see if I've got any work-in-progress on
+      them, though.</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Allow the end-user to modify the save name for Action Replay
+          MAX save files. Currently, importing a .duc file will cause a
+          duplicate entry to appear because the name in the Action Replay
+          software comes from an internal name rather than the file name. This
+          save name is already accessible but needs to be hooked up with UI,
+          preferably on the main window.</para>
+        </listitem>
+
+        <listitem>
+          <para>Determine which of the sections in the game data block is the
+          latest one (the game writes game data with a counter over one of
+          several positions in the game data block, to lengthen the EEPROM's
+          life as well as give some safety to the writing process). This
+          enables a few things:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>Display the game data's user name in the main
+              window.</para>
+            </listitem>
+
+            <listitem>
+              <para>Display the player's scores for each song in a separate
+              dialog. Maybe even offer an export-to-HTML option.</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+
+        <listitem>
+          <para>Some error handling that's better than
+          <filename>debug.txt</filename>.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+  </chapter>
+</book>
