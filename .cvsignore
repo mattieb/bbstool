@@ -1,0 +1,8 @@
+build
+debug.txt
+dist
+*.bbs
+*.dat
+*.duc
+*.pyc
+*.sav
