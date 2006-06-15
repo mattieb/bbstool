@@ -117,7 +117,7 @@ class MainFrame(wx.Frame):
 
     def __set_properties(self):
         # begin wxGlade: MainFrame.__set_properties
-        self.SetTitle("Save Editor")
+        self.SetTitle("Save Tool")
         self.score_list_box.Enable(False)
         self.score_list_box.SetSelection(0)
         self.move_up_button.Enable(False)
@@ -331,7 +331,7 @@ class AboutDialog(wx.Dialog):
         # begin wxGlade: AboutDialog.__init__
         kwds["style"] = wx.DEFAULT_DIALOG_STYLE
         wx.Dialog.__init__(self, *args, **kwds)
-        self.name_text = wx.StaticText(self, -1, "Daigasso! Band Brothers Save Editor")
+        self.name_text = wx.StaticText(self, -1, "Band Brothers Save Tool")
         self.author_text = wx.StaticText(self, -1, "Matt Behrens <matt@zigg.com>\nhttp://www.zigg.com/code/ddbsed/", style=wx.ALIGN_CENTRE)
         self.ok_button = wx.Button(self, wx.ID_OK, "&Close")
 
@@ -342,14 +342,14 @@ class AboutDialog(wx.Dialog):
     def __set_properties(self):
         # begin wxGlade: AboutDialog.__set_properties
         self.SetTitle("About")
-        self.name_text.SetFont(wx.Font(18, wx.DEFAULT, wx.NORMAL, wx.NORMAL, 0, ""))
+        self.name_text.SetFont(wx.Font(12, wx.DEFAULT, wx.NORMAL, wx.NORMAL, 0, ""))
         self.ok_button.SetDefault()
         # end wxGlade
 
     def __do_layout(self):
         # begin wxGlade: AboutDialog.__do_layout
         about_sizer = wx.BoxSizer(wx.VERTICAL)
-        about_sizer.Add(self.name_text, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL, 4)
+        about_sizer.Add(self.name_text, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL|wx.ADJUST_MINSIZE, 4)
         about_sizer.Add(self.author_text, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL, 4)
         about_sizer.Add(self.ok_button, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL, 4)
         self.SetAutoLayout(True)
