@@ -32,7 +32,8 @@
       </listitem>
 
       <listitem>
-        <para>The guys behind <ulink url="???">Python</ulink>, <ulink
+        <para>The guys behind <ulink
+        url="http://www.python.org/">Python</ulink>, <ulink
         url="http://www.wxwidgets.org/">wxWidgets</ulink>, <ulink
         url="http://www.wxpython.org/">wxPython</ulink>, and <ulink
         url="http://wxglade.sourceforge.net/">wxGlade</ulink>, for making it
@@ -371,7 +372,7 @@
         unlocked game modes; importing these will erase your scores, personal
         information, and settings but will allow you to play modes and bonus
         songs you couldn't otherwise get to for whatever reason<footnote>
-            <para>For example, Abarenbō Shōgun Theme and Gmen'75 rFequire you
+            <para>For example, Abarenbō Shōgun Theme and Gmen'75 require you
             to play the game in multiplayer mode; this requires a second
             Nintendo DS system and may not be accessible to some players. The
             Barbara Bat Theme requires you to complete Recording Ticket Level

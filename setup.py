@@ -30,11 +30,11 @@ import distutils.core
 import py2exe
 
 distutils.core.setup(name="dbbsed",
-        version="0.2-beta",
-        description="Daigasso! Band Brothers Save Editor",
+        version="0.1.999.2",
+        description="Band Brothers Save Tool",
         author="Matt Behrens", author_email="matt@zigg.com",
         url="http://www.zigg.com/code/dbbsed/",
-        windows=["dbbsed.py"],
+        windows=["bbstool.py"],
         options={"py2exe": {"packages": ["encodings"]}})
 
 # ex:et:sw=4:ts=4
