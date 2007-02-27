@@ -6,7 +6,7 @@
 
   <bookinfo>
     <copyright>
-      <year>2006 Matt Behrens</year>
+      <year>2006, 2007 Matt Behrens</year>
     </copyright>
 
     <author>
@@ -239,8 +239,10 @@
 
         <para>The save tool can also use a save dump, which is simply a file
         containing the contents of the save EEPROM on the game card. Such a
-        file will be exactly 262,144 bytes in length, and by tradition is
-        named with a <filename>.sav</filename> extension.</para>
+        file will be either exactly 262,144 bytes in length or be longer with
+        padding at the end, and by tradition is named with a
+        <filename>.sav</filename> extension. (The save tool will detect
+        trailing padding in this mode and preserve it.)</para>
 
         <para>If you have a homebrew-capable Nintendo DS, you can use <ulink
         url="http://www.pat.hi-ho.ne.jp/sata68/nds.shtml#rain">Rain</ulink>,

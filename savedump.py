@@ -36,10 +36,14 @@ class SaveFile(object):
         # Entire file is save
         self.save = save_class(file)
 
+        # Store any trailing padding (for MAX Media Player saves, others?)
+        self._padding = file.read()
+
     def write(self, file):
         """
         Write the save image to a file
         """
         self.save.write(file)
+        file.write(self._padding)
 
 # ex:et:sw=4:ts=4
